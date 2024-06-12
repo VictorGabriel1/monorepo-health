@@ -1,0 +1,15 @@
+version: "3.8"
+services:
+  dcs-postgres:
+    image: postgres:16.3
+    container_name: health-postgres-dev
+    restart: always
+    environment:
+      POSTGRES_DB: health
+      POSTGRES_USER: health-dev
+      POSTGRES_PASSWORD: healthpass2024
+    ports:
+      - 5432:5432
+    volumes:
+      - ./packages/api/src/shared/database/db-init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./packages/api/src/shared/database/db-seed.sql:/docker-entrypoint-initdb.d/seed.sql
