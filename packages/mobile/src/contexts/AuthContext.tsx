@@ -1,17 +1,19 @@
 import React, { createContext, useState } from "react";
+import api from "../services/api";
+import { UsersEntity } from "../@types/users";
 
 type AuthProps = {
   logIn: ({ password, email }: Credentials) => boolean;
   logOut: () => void;
+  user: UsersEntity | undefined;
   signUp: ({
     name,
     email,
     password,
     cpf,
-    bDay,
-    phone,
-    emergency_contact,
-    health_plan,
+    birthdate,
+    phoneNumber,
+    healthPlan,
   }: SignUpCredentials) => Promise<string>;
   authenticated: boolean;
 };
@@ -24,20 +26,15 @@ export interface Credentials {
 export interface SignUpCredentials extends Credentials {
   name: string;
   cpf: string;
-  bDay: string;
-  phone: string;
-  health_plan: string;
-  emergency_contact: string;
-}
-
-export interface User extends Credentials, SignUpCredentials {
-  id: Number;
-  registerDate: Date;
+  birthdate: string;
+  phoneNumber: string;
+  healthPlan: string;
 }
 
 export const AuthContext = createContext<AuthProps>({
   logIn: () => false,
   logOut: () => {},
+  user: undefined,
   signUp: async () => "",
   authenticated: false,
 });
@@ -48,26 +45,32 @@ export default function AuthProvider({
   children: React.ReactNode;
 }) {
   const [authenticated, setAuthenticated] = useState<boolean>(false);
+  const [user, setUser] = useState<UsersEntity | undefined>(undefined);
 
-  async function signUp({
-    name,
-    email,
-    password,
-    cpf,
-    bDay,
-    phone,
-    emergency_contact,
-    health_plan,
-  }: SignUpCredentials) {
-    return "Usuario criado!";
+  async function signUp(data: SignUpCredentials) {
+    const [day, month, year] = data.birthdate.split("/");
+    data.birthdate = `${year}-${month}-${day}`;
+    api
+      .post("/users", data)
+      .then((user) => {
+        setAuthenticated(true);
+        setUser(user.data);
+        console.log(user.data);
+      })
+      .catch((e) => console.log("error: " + Object.values(e.response.data)));
+    return "User created!";
   }
 
-  function logIn({ email, password }: Credentials) {
-    if (email) {
-      setAuthenticated(true);
-      return true;
-    }
-    return false;
+  function logIn(data: Credentials) {
+    api
+      .post("/users/login", data)
+      .then((user) => {
+        console.log(user.data);
+        setUser(user.data);
+        setAuthenticated(true);
+      })
+      .catch((e) => console.log("error: " + Object.values(e.response.data)));
+    return true;
   }
 
   function logOut() {
@@ -77,6 +80,7 @@ export default function AuthProvider({
   return (
     <AuthContext.Provider
       value={{
+        user,
         logIn,
         logOut,
         signUp,

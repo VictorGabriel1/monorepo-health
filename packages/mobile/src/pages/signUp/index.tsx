@@ -1,3 +1,4 @@
+// SignUp.js
 import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { Content } from "./styles";
@@ -15,7 +16,6 @@ const LoginValidationSchema = yup.object().shape({
     .string()
     .email("Insira um e-mail valido!")
     .required("Campo obrigatório!"),
-
   password: yup
     .string()
     .min(8, "Minimo 8 caracteres!")
@@ -29,13 +29,12 @@ const LoginValidationSchema = yup.object().shape({
     )
     .required("Campo obrigatorio!")
     .oneOf([yup.ref("password")], "As senhas não são iguais!"),
-  phone: yup
+  phoneNumber: yup
     .string()
     .length(11, "Telefone Inválido!")
     .required("Campo obrigatório!"),
   cpf: yup.string().length(11, "CPF Inválido!").required("Campo obrigatório!"),
-
-  bDay: yup
+  birthdate: yup
     .string()
     .length(10, "Data Inválida!")
     .matches(
@@ -43,11 +42,11 @@ const LoginValidationSchema = yup.object().shape({
       "Data Inválida! O formato deve ser dd/mm/yyyy"
     )
     .required("Campo obrigatório!"),
-  health_plan: yup.string().required("Campo obrigatório!"),
-  emergency_contact: yup
-    .string()
-    .length(11, "Contato Inválido!")
-    .required("Campo obrigatório!"),
+  healthPlan: yup.string().required("Campo obrigatório!"),
+  // emergencyContact: yup
+  //   .string()
+  //   .length(11, "Contato Inválido!")
+  //   .required("Campo obrigatório!"),
 });
 
 type LoginSchema = yup.InferType<typeof LoginValidationSchema>;
@@ -64,12 +63,13 @@ export default function SignUp() {
     defaultValues: {
       name: "Nara Caproni",
       email: "nara@email.com",
-      password: "senha123",
-      passwordConfirm: "senha123",
+      password: "Senha@123",
+      passwordConfirm: "Senha@123",
       cpf: "12345678910",
-      bDay: "11/11/2001",
-      phone: "12345678910",
-      emergency_contact: "12345678910",
+      birthdate: "11/11/2001",
+      phoneNumber: "12345678910",
+      // emergencyContact: "12345678910",
+      healthPlan: "123456789", // Este campo estava faltando nas default values
     },
     resolver: yupResolver(LoginValidationSchema),
     mode: "onSubmit",
@@ -80,23 +80,29 @@ export default function SignUp() {
       name,
       email,
       password,
-      bDay,
-      phone,
-      emergency_contact,
+      birthdate,
+      phoneNumber,
+      // emergencyContact,
       cpf,
-      health_plan,
+      healthPlan,
     } = data;
-    console.log(data);
-    await signUp({
-      name,
-      email,
-      cpf,
-      password,
-      bDay,
-      phone,
-      emergency_contact,
-      health_plan,
-    }).then((res) => console.log(res));
+
+    try {
+      const result = await signUp({
+        name,
+        email,
+        cpf,
+        password,
+        birthdate, // Aqui deve ser birthdate conforme o DTO da API
+        phoneNumber, // Aqui deve ser phoneNumberNumber conforme o DTO da API
+        // emergencyContact, // Aqui deve ser emergencyContact conforme o DTO da API
+        healthPlan, // Aqui deve ser healthPlan conforme o DTO da API
+      });
+      console.log(result);
+    } catch (error: any) {
+      console.error("Erro ao criar usuário:", error.message);
+      // Adicione lógica para lidar com o erro, como mostrar uma mensagem ao usuário
+    }
   }
 
   return (
@@ -135,9 +141,9 @@ export default function SignUp() {
         <CustomInput
           label="Data de Nascimento"
           control={control}
-          error={errors?.bDay?.message}
+          error={errors?.birthdate?.message}
           type="text"
-          name="bDay"
+          name="birthdate"
           placeholder="Data de nascimento"
           backgroundColor="#fff"
           errorMessageColor="#f5cc03"
@@ -145,30 +151,30 @@ export default function SignUp() {
         <CustomInput
           label="Telefone"
           control={control}
-          error={errors?.phone?.message}
+          error={errors?.phoneNumber?.message}
           type="text"
-          name="phone"
-          placeholder="CNH"
+          name="phoneNumber"
+          placeholder="Telefone"
           backgroundColor="#fff"
           errorMessageColor="#f5cc03"
         />
-        <CustomInput
+        {/* <CustomInput
           label="Contato de emergência"
           control={control}
-          error={errors?.emergency_contact?.message}
+          error={errors?.emergencyContact?.message}
           type="text"
-          name="emergency_contact"
-          placeholder="Senha"
+          name="emergencyContact"
+          placeholder="Contato de emergência"
           backgroundColor="#fff"
           errorMessageColor="#f5cc03"
-        />
+        /> */}
         <CustomInput
           label="Número do convênio"
           control={control}
-          error={errors?.health_plan?.message}
+          error={errors?.healthPlan?.message}
           type="text"
-          name="health_plan"
-          placeholder="Confirme sua senha"
+          name="healthPlan"
+          placeholder="Número do convênio"
           backgroundColor="#fff"
           errorMessageColor="#f5cc03"
         />

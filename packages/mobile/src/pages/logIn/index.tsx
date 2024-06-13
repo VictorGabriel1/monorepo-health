@@ -35,8 +35,8 @@ export default function LogIn() {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      email: "nara@email.com",
-      password: "senha123",
+      email: "john.doe@example.com",
+      password: "Senha@123",
       connect: false,
     },
     resolver: yupResolver(LoginValidationSchema),
@@ -45,7 +45,6 @@ export default function LogIn() {
 
   function handleLogin(data: LoginSchema) {
     const { email, password } = data;
-    console.log(data);
     logIn({ email, password });
   }
 
