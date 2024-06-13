@@ -22,8 +22,14 @@ export class UsersEntity extends BaseEntity {
   @Column({ length: 100 })
   password: string;
 
-  @Column({ name: 'phone_number', length: 20 })
+  @Column({ name: 'phone_number', length: 11 })
   phoneNumber: string;
+
+  @Column({ length: 11 })
+  cpf: string;
+
+  @Column({ name: 'health_plan' })
+  healthPlan: string;
 
   @Column({ type: 'date' })
   birthdate: Date;

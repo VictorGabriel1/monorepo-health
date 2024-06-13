@@ -4,7 +4,7 @@ import { UsersEntity } from 'src/users/entities/users.entity';
 
 @Entity('blood_pressure')
 export class BloodPressureEntity extends BaseEntity {
-  @Column({ type: 'date' })
+  @Column({ name: 'measurement_date', type: 'date' })
   measurementDate: Date;
 
   @Column()

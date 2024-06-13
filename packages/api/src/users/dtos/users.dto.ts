@@ -24,6 +24,14 @@ export class CreateUserDto {
   phoneNumber: string;
 
   @ApiProperty()
+  @IsString()
+  cpf: string;
+
+  @ApiProperty()
+  @IsString()
+  healthPlan: string;
+
+  @ApiProperty()
   @IsDateString()
   birthdate: Date;
 }

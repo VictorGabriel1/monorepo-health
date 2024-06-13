@@ -1,9 +1,9 @@
 -- Inserção de dados exemplo na tabela users
-INSERT INTO users (name, email, password, phone_number, birthdate) 
+INSERT INTO users (name, email, password, cpf, health_plan, phone_number, birthdate) 
 VALUES 
-('John Doe', 'john.doe@example.com', 'password123', '1234567890', '1985-05-15'),
-('Jane Smith', 'jane.smith@example.com', 'password456', '0987654321', '1990-08-25'),
-('Michael Johnson', 'michael.johnson@example.com', 'password789', '1112223333', '1975-12-05');
+('John Doe', 'john.doe@example.com', '$2b$12$zvfgmaAWhrcSFr6lXdkIOesLTQLkP60N8zLS2m9iZlzKVg99GBgK6', '1234567890', '1234567890', '1234567890', '1985-05-15'),
+('Jane Smith', 'jane.smith@example.com', '$2b$12$zvfgmaAWhrcSFr6lXdkIOesLTQLkP60N8zLS2m9iZlzKVg99GBgK6', '0987654321', '1234567890', '1234567890', '1990-08-25'),
+('Michael Johnson', 'michael.johnson@example.com', '$2b$12$zvfgmaAWhrcSFr6lXdkIOesLTQLkP60N8zLS2m9iZlzKVg99GBgK6', '1112223333', '1234567890', '1234567890', '1975-12-05');
 
 INSERT INTO doctors (name, crm, specialty) 
 VALUES 
@@ -34,7 +34,6 @@ VALUES
 -- Inserção de dados exemplo na tabela current_medications
 INSERT INTO current_medications (user_id, medication) 
 VALUES 
-((SELECT id FROM users WHERE email = 'john.doe@example.com'), NULL),
 ((SELECT id FROM users WHERE email = 'jane.smith@example.com'), 'Lisinopril, Metformina'),
 ((SELECT id FROM users WHERE email = 'michael.johnson@example.com'), 'Insulina, Atorvastatina');
 

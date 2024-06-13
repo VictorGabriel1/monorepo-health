@@ -4,10 +4,10 @@ import { BaseEntity } from 'src/shared/entities/base.entity';
 
 @Entity('emergency_contacts')
 export class EmergencyContactsEntity extends BaseEntity {
-  @Column({ length: 100 })
+  @Column({ name: 'contact_name', length: 100 })
   contactName: string;
 
-  @Column({ length: 20 })
+  @Column({ name: 'contact_phone' })
   contactPhone: string;
 
   @Column({ length: 50, nullable: true })

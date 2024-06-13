@@ -7,10 +7,10 @@ export class MedicalHistoryEntity extends BaseEntity {
   @Column({ type: 'text', nullable: true })
   allergies: string;
 
-  @Column({ type: 'text', nullable: true })
+  @Column({ name: 'chronic_diseases', type: 'text', nullable: true })
   chronicDiseases: string;
 
-  @Column({ type: 'text', nullable: true })
+  @Column({ name: 'past_surgeries', type: 'text', nullable: true })
   pastSurgeries: string;
 
   @ManyToOne(() => UsersEntity, (user) => user.medicalHistory, {

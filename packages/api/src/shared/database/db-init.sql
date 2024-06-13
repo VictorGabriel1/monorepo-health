@@ -7,6 +7,8 @@ CREATE TABLE users (
     name VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     password VARCHAR(100) NOT NULL,
+    cpf VARCHAR(11) NOT NULL,
+    health_plan VARCHAR(100),
     phone_number VARCHAR(20) NOT NULL,
     birthdate DATE NOT NULL,
     created_at TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP(6) NOT NULL,
@@ -68,7 +70,7 @@ CREATE TABLE medical_history (
 CREATE TABLE current_medications (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID NOT NULL,
-    medication TEXT,
+    medication TEXT NOT NULL,
     created_at TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP(6) NOT NULL,
     updated_at TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP(6) NOT NULL,
     deleted_at TIMESTAMP(6),

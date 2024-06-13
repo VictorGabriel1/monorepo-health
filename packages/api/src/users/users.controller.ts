@@ -20,6 +20,7 @@ import {
   ApiOperation,
   ApiParam,
   ApiTags,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { Response } from 'express';
 import { CreateAddressDto, UpdateAddressDto } from './dtos/addresses.dto';
@@ -27,6 +28,7 @@ import {
   CreateEmergencyContactDto,
   UpdateEmergencyContactDto,
 } from './dtos/emergency-contacts.dto';
+import { LoginUserDto } from './dtos/login.dto';
 
 @ApiTags('Users')
 @Controller('users')
@@ -37,12 +39,8 @@ export class UsersController {
   @ApiOperation({ summary: 'Create User' })
   @ApiCreatedResponse({ description: 'User created' })
   @ApiBadRequestResponse({ description: 'Invalid data' })
-  async createUser(
-    @Body() createUserDto: CreateUserDto,
-    @Res() response: Response,
-  ) {
-    await this.usersService.createUser(createUserDto);
-    return response.status(HttpStatus.CREATED).send('User created!');
+  async createUser(@Body() createUserDto: CreateUserDto) {
+    return await this.usersService.createUser(createUserDto);
   }
 
   @Get(':id')
@@ -75,6 +73,15 @@ export class UsersController {
   @ApiBadRequestResponse({ description: 'Invalid data' })
   async deleteUser(@Param('id') id: string): Promise<void> {
     await this.usersService.deleteUser(id);
+  }
+
+  @Post('login')
+  @ApiOperation({ summary: 'User login' })
+  @ApiOkResponse({ description: 'Login successful' })
+  @ApiUnauthorizedResponse({ description: 'Invalid credentials' })
+  @ApiBadRequestResponse({ description: 'Invalid data' })
+  async login(@Body() loginUserDto: LoginUserDto) {
+    return await this.usersService.login(loginUserDto);
   }
 
   // Address routes

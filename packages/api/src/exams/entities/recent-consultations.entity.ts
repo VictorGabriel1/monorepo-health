@@ -4,7 +4,7 @@ import { UsersEntity } from 'src/users/entities/users.entity';
 
 @Entity('recent_consultations')
 export class RecentConsultationsEntity extends BaseEntity {
-  @Column({ type: 'date' })
+  @Column({ name: 'consultation_date', type: 'date' })
   consultationDate: Date;
 
   @Column({ type: 'text' })

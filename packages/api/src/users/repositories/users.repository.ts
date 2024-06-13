@@ -22,6 +22,10 @@ export class UsersRepository {
     return user;
   }
 
+  async findByEmail(email: string): Promise<UsersEntity | undefined> {
+    return await this.usersRepository.findOne({ where: { email } });
+  }
+
   async update(
     id: string,
     userData: DeepPartial<UsersEntity>,

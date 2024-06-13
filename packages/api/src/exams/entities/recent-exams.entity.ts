@@ -6,10 +6,10 @@ import { HospitalsEntity } from 'src/doctors/entities/hospitals.entity';
 
 @Entity('recent_exams')
 export class RecentExamsEntity extends BaseEntity {
-  @Column({ length: 100 })
+  @Column({ name: 'exam_name', length: 100 })
   examName: string;
 
-  @Column({ type: 'date' })
+  @Column({ name: 'exam_date', type: 'date' })
   examDate: Date;
 
   @Column({ type: 'text' })

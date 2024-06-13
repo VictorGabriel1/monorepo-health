@@ -4,10 +4,10 @@ import { UsersEntity } from 'src/users/entities/users.entity';
 
 @Entity('vaccination_history')
 export class VaccinationHistoryEntity extends BaseEntity {
-  @Column({ length: 100 })
+  @Column({ name: 'vaccine_name', length: 100 })
   vaccineName: string;
 
-  @Column({ type: 'date' })
+  @Column({ name: 'last_vaccination_date', type: 'date' })
   lastVaccinationDate: Date;
 
   @Column({ length: 20 })

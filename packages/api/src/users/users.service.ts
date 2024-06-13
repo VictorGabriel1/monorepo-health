@@ -2,6 +2,7 @@ import {
   Injectable,
   BadRequestException,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { UsersRepository } from './repositories/users.repository';
 import { AddressesRepository } from './repositories/addresses.repository';
@@ -17,6 +18,7 @@ import { AddressesEntity } from './entities/addresses.entity';
 import { EmergencyContactsEntity } from './entities/emergency-contacts.entity';
 import { UpdateResult } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { LoginUserDto } from './dtos/login.dto';
 
 @Injectable()
 export class UsersService {
@@ -70,6 +72,24 @@ export class UsersService {
     } catch (error) {
       throw new BadRequestException(error.message);
     }
+  }
+
+  async login(loginUserDto: LoginUserDto) {
+    const { email, password } = loginUserDto;
+
+    // Buscar usuário pelo email
+    const user = await this.userRepository.findByEmail(email);
+    if (!user) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    // Verificar se a senha está correta
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    return user;
   }
 
   // Addresses services
