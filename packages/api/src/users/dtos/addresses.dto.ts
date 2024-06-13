@@ -1,5 +1,5 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { IsString, IsOptional } from 'class-validator';
+import { IsString, IsUUID, IsOptional, IsPostalCode } from 'class-validator';
 
 export class CreateAddressDto {
   @ApiProperty()
@@ -11,8 +11,8 @@ export class CreateAddressDto {
   streetNumber: string;
 
   @ApiProperty({ required: false })
-  @IsOptional()
   @IsString()
+  @IsOptional()
   streetComplement?: string;
 
   @ApiProperty()
@@ -28,8 +28,12 @@ export class CreateAddressDto {
   state: string;
 
   @ApiProperty()
-  @IsString()
+  @IsPostalCode('BR')
   zip: string;
+
+  @ApiProperty()
+  @IsUUID()
+  userId: string;
 }
 
 export class UpdateAddressDto extends PartialType(CreateAddressDto) {}

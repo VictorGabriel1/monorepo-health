@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Repository, DeepPartial, UpdateResult } from 'typeorm';
 import { UsersEntity } from '../entities/users.entity';
-import { DeepPartial, Repository, UpdateResult } from 'typeorm';
 
 @Injectable()
 export class UsersRepository {
@@ -19,23 +19,19 @@ export class UsersRepository {
     if (!user) {
       throw new NotFoundException(`User with ID "${id}" not found.`);
     }
-
     return user;
-  }
-
-  async delete(id: string): Promise<void> {
-    await this.usersRepository.delete(id);
   }
 
   async update(
     id: string,
     userData: DeepPartial<UsersEntity>,
   ): Promise<UpdateResult> {
-    const existingUser = await this.findById(id);
-    if (!existingUser) {
-      throw new NotFoundException(`User with ID "${id}" not found.`);
-    }
-
+    await this.findById(id); // Check if the user exists
     return await this.usersRepository.update(id, userData);
+  }
+
+  async delete(id: string): Promise<void> {
+    await this.findById(id); // Check if the user exists
+    await this.usersRepository.delete(id);
   }
 }

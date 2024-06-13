@@ -1,12 +1,6 @@
-import {
-  Entity,
-  Column,
-  ManyToOne,
-  JoinColumn,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { BaseEntity } from 'src/shared/entities/base.entity';
+import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { UsersEntity } from './users.entity';
+import { BaseEntity } from 'src/shared/entities/base.entity';
 
 @Entity('addresses')
 export class AddressesEntity extends BaseEntity {
@@ -31,9 +25,9 @@ export class AddressesEntity extends BaseEntity {
   @Column({ length: 10 })
   zip: string;
 
-  @JoinColumn({ name: 'user_id' })
-  @ManyToOne(() => UsersEntity, (users) => users.addresses, {
+  @ManyToOne(() => UsersEntity, (user) => user.addresses, {
     onDelete: 'CASCADE',
   })
+  @JoinColumn({ name: 'user_id' })
   user: UsersEntity;
 }

@@ -2,7 +2,6 @@ import { ApiProperty, PartialType } from '@nestjs/swagger';
 import {
   IsString,
   IsEmail,
-  IsOptional,
   IsDateString,
   IsStrongPassword,
 } from 'class-validator';

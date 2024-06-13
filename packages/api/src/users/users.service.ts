@@ -1,14 +1,20 @@
 import {
-  BadRequestException,
   Injectable,
+  BadRequestException,
   NotFoundException,
 } from '@nestjs/common';
 import { UsersRepository } from './repositories/users.repository';
 import { AddressesRepository } from './repositories/addresses.repository';
+import { EmergencyContactsRepository } from './repositories/emergency-contacts.repository';
 import { CreateUserDto, UpdateUserDto } from './dtos/users.dto';
+import { CreateAddressDto, UpdateAddressDto } from './dtos/addresses.dto';
+import {
+  CreateEmergencyContactDto,
+  UpdateEmergencyContactDto,
+} from './dtos/emergency-contacts.dto';
 import { UsersEntity } from './entities/users.entity';
 import { AddressesEntity } from './entities/addresses.entity';
-import { CreateAddressDto, UpdateAddressDto } from './dtos/addresses.dto';
+import { EmergencyContactsEntity } from './entities/emergency-contacts.entity';
 import { UpdateResult } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 
@@ -17,12 +23,13 @@ export class UsersService {
   constructor(
     private readonly userRepository: UsersRepository,
     private readonly addressRepository: AddressesRepository,
+    private readonly emergencyContactRepository: EmergencyContactsRepository,
   ) {}
 
+  // Users services
   async createUser(createUserDto: CreateUserDto): Promise<UsersEntity> {
     try {
-      createUserDto.password = '1';
-
+      // Hash password before saving
       const saltRounds = 12;
       const hashedPassword = await bcrypt.hash(
         createUserDto.password,
@@ -51,7 +58,6 @@ export class UsersService {
   ): Promise<UpdateResult> {
     try {
       const user = await this.userRepository.update(id, updateUserDto);
-
       return user;
     } catch (error) {
       throw new BadRequestException(error.message);
@@ -66,6 +72,7 @@ export class UsersService {
     }
   }
 
+  // Addresses services
   async createAddress(
     createAddressDto: CreateAddressDto,
   ): Promise<AddressesEntity> {
@@ -77,9 +84,14 @@ export class UsersService {
     }
   }
 
-  async getAddressById(id: string): Promise<AddressesEntity> {
+  async getAddressById(
+    id: string,
+    addressId: string,
+  ): Promise<AddressesEntity> {
     const address = await this.addressRepository.findById(id);
-
+    if (!address) {
+      throw new NotFoundException(`Address with ID "${id}" not found.`);
+    }
     return address;
   }
 
@@ -98,6 +110,53 @@ export class UsersService {
   async deleteAddress(id: string): Promise<void> {
     try {
       await this.addressRepository.delete(id);
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  // Emergency Contacts services
+  async createEmergencyContact(
+    createEmergencyContactDto: CreateEmergencyContactDto,
+  ): Promise<EmergencyContactsEntity> {
+    try {
+      const emergencyContact = await this.emergencyContactRepository.create(
+        createEmergencyContactDto,
+      );
+      return emergencyContact;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  async getEmergencyContactById(id: string): Promise<EmergencyContactsEntity> {
+    const emergencyContact = await this.emergencyContactRepository.findById(id);
+    if (!emergencyContact) {
+      throw new NotFoundException(
+        `Emergency Contact with ID "${id}" not found.`,
+      );
+    }
+    return emergencyContact;
+  }
+
+  async updateEmergencyContact(
+    id: string,
+    updateEmergencyContactDto: UpdateEmergencyContactDto,
+  ): Promise<UpdateResult> {
+    try {
+      const emergencyContact = await this.emergencyContactRepository.update(
+        id,
+        updateEmergencyContactDto,
+      );
+      return emergencyContact;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  async deleteEmergencyContact(id: string): Promise<void> {
+    try {
+      await this.emergencyContactRepository.delete(id);
     } catch (error) {
       throw new BadRequestException(error.message);
     }
