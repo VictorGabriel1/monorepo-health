@@ -20,7 +20,6 @@ const LoginValidationSchema = yup.object().shape({
     .string()
     .min(8, "Minimo 8 caracteres!")
     .required("Campo obrigatorio!"),
-  connect: yup.boolean().required(),
 });
 
 type LoginSchema = yup.InferType<typeof LoginValidationSchema>;
@@ -37,7 +36,6 @@ export default function LogIn() {
     defaultValues: {
       email: "john.doe@example.com",
       password: "Senha@123",
-      connect: false,
     },
     resolver: yupResolver(LoginValidationSchema),
     mode: "onSubmit",

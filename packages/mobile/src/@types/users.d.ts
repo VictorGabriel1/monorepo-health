@@ -67,7 +67,6 @@ export interface MedicalSignature extends BaseEntity {
 export interface UsersEntity extends BaseEntity {
   name: string;
   email: string;
-  password: string;
   phoneNumber: string;
   cpf: string;
   healthPlan: string;

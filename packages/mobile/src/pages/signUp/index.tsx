@@ -19,14 +19,15 @@ const LoginValidationSchema = yup.object().shape({
   password: yup
     .string()
     .min(8, "Minimo 8 caracteres!")
-    .required("Campo obrigatorio!"),
-  passwordConfirm: yup
-    .string()
-    .min(8)
     .matches(
       /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{4,}$/,
       "A senha deve conter: 1 letra minuscula, 1 maiscula, 1 numero e 1 caracter especial"
     )
+    .required("Campo obrigatorio!"),
+  passwordConfirm: yup
+    .string()
+    .min(8)
+
     .required("Campo obrigatorio!")
     .oneOf([yup.ref("password")], "As senhas não são iguais!"),
   phoneNumber: yup
