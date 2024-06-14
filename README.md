@@ -1,110 +1,86 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Monorepo Health
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Descrição
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Este projeto é um monorepo para uma aplicação de saúde que inclui uma API, um front-end web e um aplicativo móvel. Utiliza `pnpm` para gerenciamento de pacotes, `Docker` para a API e `Android Studio` para o aplicativo móvel.
 
-## Description
+## Requisitos
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Antes de começar, certifique-se de ter os seguintes softwares instalados no seu sistema:
 
-## Installation
+- [Node.js](https://nodejs.org/) (versão 14 ou superior)
+- [pnpm](https://pnpm.io/) (gerenciador de pacotes)
+- [Docker](https://www.docker.com/) e [Docker Compose](https://docs.docker.com/compose/) ou [Rancher Desktop](https://rancherdesktop.io/)
+- [Android Studio](https://developer.android.com/studio)
+
+## Instalação
+
+### Passo 1: Clone o Repositório
 
 ```bash
-$ pnpm install
+git clone https://github.com/VictorGabriel1/monorepo-health.git
+cd monorepo-health
 ```
 
-## Running the app
+### Passo 2: Instale as Dependências
 
 ```bash
-# development
-$ pnpm run start
-
-# watch mode
-$ pnpm run start:dev
-
-# production mode
-$ pnpm run start:prod
+pnpm install
 ```
 
-## Test
+### Passo 3: Configure o Ambiente
 
-```bash
-# unit tests
-$ pnpm run test
+- Docker: Certifique-se de que o Docker está em execução, pois vamos utilizá-lo para rodar a API.
+- Rancher Desktop: Se você estiver usando o Rancher Desktop, inicie-o.
 
-# e2e tests
-$ pnpm run test:e2e
+### Passo 4: Configure o Android Studio
 
-# test coverage
-$ pnpm run test:cov
-```
+1. Baixe e instale o Android Studio.
+2. Configure um emulador Android:
+   - Abra o Android Studio.
+   - Vá para Configurações > AVD Manager.
+   - Crie um novo dispositivo virtual.
+3. Configure variáveis de ambiente:
+   - Certifique-se de que `ANDROID_HOME` e `JAVA_HOME` estão configurados corretamente.
 
-## Support
+### Passo 5: Execute o Docker
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+- O Docker está programado para rodar na porta `5432`, verifique se a porta está disponível, pois a API se conecta com o banco nessa porta, em outro caso se for necessário alterar a porta, nos arquivos de config [packages/api/src/config/dataSource.ts](https://github.com/VictorGabriel1/monorepo-health/tree/master/packages/api/src/config/dataSource.ts) e [packages/api/src/config/typeORMconfig.ts](https://github.com/VictorGabriel1/monorepo-health/tree/master/packages/api/src/config/typeORMconfig.ts)
 
-## Stay in touch
+- Execute o Docker Compose para iniciar os serviços:
+  ```bash
+  docker-compose up
+  ```
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## Executando o Projeto
 
-## License
+#### Aqui será necessário rodar todos os serviços em terminais diferentes, para que diminuir a chance de algo dar errado, e para conseguir usar alguns terminais, como o Metro (Terminal do React Native) por exemplo, onde você pode apertar "A" ou "R" caso o aplicativo não carregue, ou em algum erro de carragemento. Caso a API mostre um erro de conexão com o banco de dados, por favor, reinicie o computador e tente novamente, não desita.
 
-Nest is [MIT licensed](LICENSE).
+- ### Executar a API
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+  A API estará disponível em `http://localhost:3001`. O Swagger dela estará disponível também, para a visulização e teste de todas as rotas, na em `http://localhost:3001/health/api#`
 
-## Getting Started
+  ```bash
+  pnpm api
+  ```
 
-First, run the development server:
+- ### Executar o Front-end Web
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+  A aplicação web estará disponível em `http://localhost:3000`.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+  ```bash
+  pnpm web
+  ```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- ### Executar o Aplicativo Android
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+  - Certifique-se de que um emulador Android está em execução ou um dispositivo está conectado via USB.
 
-## Learn More
+  ```bash
+  pnpm android
+  ```
 
-To learn more about Next.js, take a look at the following resources:
+## Funcionalidades
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- Web: No aplicativo Web você é um médico, que pode logar ou se cadastar na plataforma, para ver a saúde de seus pacientes que também estão na plataforma, e lançar informações sobre suas consultas com eles no sistema.
+- App: No App você é um paciente, onde pode se cadastrar ou logar para ter acesso a suas informações médicas, como suas últimas consultas, exames, resultados, e recomendações médicas para você, diretamente do seu médico.
