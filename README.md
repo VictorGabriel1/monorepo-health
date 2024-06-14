@@ -83,4 +83,4 @@ pnpm install
 ## Funcionalidades
 
 - Web: No aplicativo Web você é um médico, que pode logar ou se cadastar na plataforma, para ver a saúde de seus pacientes que também estão na plataforma, e lançar informações sobre suas consultas com eles no sistema.
-- App: No App você é um paciente, onde pode se cadastrar ou logar para ter acesso a suas informações médicas, como suas últimas consultas, exames, resultados, e recomendações médicas para você, diretamente do seu médico.
+- App: No App você é um paciente, onde pode se cadastrar ou logar para ter acesso a suas informações médicas, como suas últimas consultas, exames, resultados, e recomendações médicas para você, diretamente do seu médico. O App tem autenticação por Digital, mas no caso do emulador, é necessário [ativar](https://medium.com/@munbonecci/empowering-biometric-testing-on-android-emulators-configuring-the-fingerprint-sensor-01d69d0e2c61) nas configurações do próprio emulador.
