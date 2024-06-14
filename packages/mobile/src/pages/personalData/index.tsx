@@ -62,8 +62,7 @@ export default function PersonalData() {
           items={
             user.currentMedications
               ? user.currentMedications.map(
-                  (medication) =>
-                    `${medication.medication}: ${medication.dosage}, ${medication.frequency} (${medication.startDate ? formatDate(medication.startDate) : "Sem data de início"})`
+                  (medication) => `${medication.medication}`
                 )
               : []
           }
