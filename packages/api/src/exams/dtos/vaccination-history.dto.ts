@@ -17,6 +17,10 @@ export class CreateVaccinationHistoryDto {
   @ApiProperty()
   @IsUUID()
   userId: string;
+
+  @ApiProperty()
+  @IsUUID()
+  doctorId: string;
 }
 
 export class UpdateVaccinationHistoryDto extends PartialType(

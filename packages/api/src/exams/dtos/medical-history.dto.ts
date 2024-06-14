@@ -20,6 +20,10 @@ export class CreateMedicalHistoryDto {
   @ApiProperty()
   @IsUUID()
   userId: string;
+
+  @ApiProperty()
+  @IsUUID()
+  doctorId: string;
 }
 
 export class UpdateMedicalHistoryDto extends PartialType(

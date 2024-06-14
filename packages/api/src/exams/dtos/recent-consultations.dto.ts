@@ -13,6 +13,10 @@ export class CreateRecentConsultationsDto {
   @ApiProperty()
   @IsUUID()
   userId: string;
+
+  @ApiProperty()
+  @IsUUID()
+  doctorId: string;
 }
 
 export class UpdateRecentConsultationsDto extends PartialType(

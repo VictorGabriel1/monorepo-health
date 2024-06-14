@@ -29,5 +29,5 @@ export class AddressesEntity extends BaseEntity {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'user_id' })
-  user: UsersEntity;
+  user?: UsersEntity;
 }

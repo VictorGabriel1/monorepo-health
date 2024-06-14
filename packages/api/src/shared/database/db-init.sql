@@ -37,20 +37,13 @@ CREATE TABLE addresses (
 CREATE TABLE doctors (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(100) NOT NULL,
     crm VARCHAR(20) UNIQUE NOT NULL,
     specialty VARCHAR(50) NOT NULL,
     created_at TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP(6) NOT NULL,
-    updated_at TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP(6) NOT NULL
-);
-
--- Criação da tabela hospitals
-CREATE TABLE hospitals (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    name VARCHAR(100) NOT NULL,
-    address VARCHAR(200) NOT NULL,
-    phone VARCHAR(20) NOT NULL,
-    created_at TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP(6) NOT NULL,
-    updated_at TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP(6) NOT NULL
+    updated_at TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP(6) NOT NULL,
+    deleted_at TIMESTAMP(6)
 );
 
 -- Criação da tabela medical_history
@@ -60,10 +53,12 @@ CREATE TABLE medical_history (
     allergies TEXT,
     chronic_diseases TEXT,
     past_surgeries TEXT,
+    doctor_id UUID NOT NULL,
     created_at TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP(6) NOT NULL,
     updated_at TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP(6) NOT NULL,
     deleted_at TIMESTAMP(6),
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (doctor_id) REFERENCES doctors(id) ON DELETE SET NULL
 );
 
 -- Criação da tabela current_medications
@@ -71,10 +66,12 @@ CREATE TABLE current_medications (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID NOT NULL,
     medication TEXT NOT NULL,
+    doctor_id UUID NOT NULL,
     created_at TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP(6) NOT NULL,
     updated_at TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP(6) NOT NULL,
     deleted_at TIMESTAMP(6),
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (doctor_id) REFERENCES doctors(id) ON DELETE SET NULL
 );
 
 -- Criação da tabela vaccination_history
@@ -84,10 +81,12 @@ CREATE TABLE vaccination_history (
     vaccine_name VARCHAR(100) NOT NULL,
     last_vaccination_date DATE NOT NULL,
     status VARCHAR(20) NOT NULL,
+    doctor_id UUID NOT NULL,
     created_at TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP(6) NOT NULL,
     updated_at TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP(6) NOT NULL,
     deleted_at TIMESTAMP(6),
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (doctor_id) REFERENCES doctors(id) ON DELETE SET NULL
 );
 
 -- Criação da tabela recent_consultations
@@ -96,10 +95,12 @@ CREATE TABLE recent_consultations (
     user_id UUID NOT NULL,
     consultation_date DATE NOT NULL,
     details TEXT,
+    doctor_id UUID NOT NULL,
     created_at TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP(6) NOT NULL,
     updated_at TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP(6) NOT NULL,
     deleted_at TIMESTAMP(6),
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (doctor_id) REFERENCES doctors(id) ON DELETE SET NULL
 );
 
 -- Criação da tabela blood_pressure
@@ -109,10 +110,12 @@ CREATE TABLE blood_pressure (
     measurement_date DATE NOT NULL,
     systolic INTEGER NOT NULL,
     diastolic INTEGER NOT NULL,
+    doctor_id UUID NOT NULL,
     created_at TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP(6) NOT NULL,
     updated_at TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP(6) NOT NULL,
     deleted_at TIMESTAMP(6),
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (doctor_id) REFERENCES doctors(id) ON DELETE SET NULL
 );
 
 -- Criação da tabela recent_exams
@@ -123,13 +126,11 @@ CREATE TABLE recent_exams (
     exam_date DATE NOT NULL,
     results TEXT,
     doctor_id UUID NOT NULL,
-    hospital_id UUID NOT NULL,
     created_at TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP(6) NOT NULL,
     updated_at TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP(6) NOT NULL,
     deleted_at TIMESTAMP(6),
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (doctor_id) REFERENCES doctors(id),
-    FOREIGN KEY (hospital_id) REFERENCES hospitals(id)
+    FOREIGN KEY (doctor_id) REFERENCES doctors(id) ON DELETE SET NULL
 );
 
 -- Criação da tabela recommendations
@@ -142,20 +143,7 @@ CREATE TABLE recommendations (
     updated_at TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP(6) NOT NULL,
     deleted_at TIMESTAMP(6),
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (doctor_id) REFERENCES doctors(id)
-);
-
--- Criação da tabela medical_signatures
-CREATE TABLE medical_signatures (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    user_id UUID NOT NULL,
-    doctor_id UUID NOT NULL,
-    crm VARCHAR(50) NOT NULL,
-    created_at TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP(6) NOT NULL,
-    updated_at TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP(6) NOT NULL,
-    deleted_at TIMESTAMP(6),
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (doctor_id) REFERENCES doctors(id)
+    FOREIGN KEY (doctor_id) REFERENCES doctors(id) ON DELETE SET NULL
 );
 
 -- Criação da tabela emergency_contacts
@@ -231,12 +219,6 @@ EXECUTE FUNCTION update_updated_at_column();
 -- Criar trigger para a tabela recommendations
 CREATE TRIGGER trigger_update_recommendations_updated_at
 BEFORE UPDATE ON recommendations
-FOR EACH ROW
-EXECUTE FUNCTION update_updated_at_column();
-
--- Criar trigger para a tabela medical_signatures
-CREATE TRIGGER trigger_update_medical_signatures_updated_at
-BEFORE UPDATE ON medical_signatures
 FOR EACH ROW
 EXECUTE FUNCTION update_updated_at_column();
 

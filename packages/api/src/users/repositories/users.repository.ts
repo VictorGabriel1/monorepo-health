@@ -23,7 +23,11 @@ export class UsersRepository {
   }
 
   async findByEmail(email: string): Promise<UsersEntity | undefined> {
-    return await this.usersRepository.findOne({ where: { email } });
+    const user = await this.usersRepository.findOne({ where: { email } });
+    if (!user) {
+      throw new NotFoundException(`User with email "${email}" not found.`);
+    }
+    return user;
   }
 
   async update(

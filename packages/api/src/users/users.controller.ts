@@ -8,6 +8,8 @@ import {
   Post,
   Res,
   HttpStatus,
+  UseInterceptors,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto, UpdateUserDto } from './dtos/users.dto';
@@ -28,7 +30,7 @@ import {
   CreateEmergencyContactDto,
   UpdateEmergencyContactDto,
 } from './dtos/emergency-contacts.dto';
-import { LoginUserDto } from './dtos/login.dto';
+import { LoginDto } from '../shared/dto/login.dto';
 
 @ApiTags('Users')
 @Controller('users')
@@ -36,6 +38,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post('/')
+  @UseInterceptors(ClassSerializerInterceptor)
   @ApiOperation({ summary: 'Create User' })
   @ApiCreatedResponse({ description: 'User created' })
   @ApiBadRequestResponse({ description: 'Invalid data' })
@@ -50,6 +53,15 @@ export class UsersController {
   @ApiParam({ name: 'id', type: 'string', required: true })
   async getUserById(@Param('id') id: string) {
     return await this.usersService.getUserById(id);
+  }
+
+  @Get('email/:email')
+  @ApiOperation({ summary: 'Get user by Email' })
+  @ApiOkResponse({ description: 'User found' })
+  @ApiNotFoundResponse({ description: 'User not found' })
+  @ApiParam({ name: 'email', type: 'string', required: true })
+  async getUserByEmail(@Param('email') email: string) {
+    return await this.usersService.getUserByEmail(email);
   }
 
   @Patch(':id')
@@ -80,7 +92,7 @@ export class UsersController {
   @ApiOkResponse({ description: 'Login successful' })
   @ApiUnauthorizedResponse({ description: 'Invalid credentials' })
   @ApiBadRequestResponse({ description: 'Invalid data' })
-  async login(@Body() loginUserDto: LoginUserDto) {
+  async login(@Body() loginUserDto: LoginDto) {
     return await this.usersService.login(loginUserDto);
   }
 
@@ -97,17 +109,13 @@ export class UsersController {
     return response.status(HttpStatus.CREATED).send('Address created!');
   }
 
-  @Get(':userId/addresses/:addressId')
+  @Get('addresses/:addressId')
   @ApiOperation({ summary: 'Get Address by ID for User' })
   @ApiOkResponse({ description: 'Address found' })
   @ApiNotFoundResponse({ description: 'Address not found' })
-  @ApiParam({ name: 'userId', type: 'string', required: true })
   @ApiParam({ name: 'addressId', type: 'string', required: true })
-  async getAddressById(
-    @Param('userId') userId: string,
-    @Param('addressId') addressId: string,
-  ) {
-    return await this.usersService.getAddressById(userId, addressId);
+  async getAddressById(@Param('addressId') addressId: string) {
+    return await this.usersService.getAddressById(addressId);
   }
 
   @Patch('addresses/:addressId')

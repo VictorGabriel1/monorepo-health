@@ -8,8 +8,8 @@ import { RecentConsultationsEntity } from 'src/exams/entities/recent-consultatio
 import { BloodPressureEntity } from 'src/exams/entities/blood-pressure.entity';
 import { RecentExamsEntity } from 'src/exams/entities/recent-exams.entity';
 import { RecommendationsEntity } from 'src/exams/entities/recommendations.entity';
-import { MedicalSignaturesEntity } from 'src/doctors/entities/medical-signatures.entity';
 import { EmergencyContactsEntity } from './emergency-contacts.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity('users')
 export class UsersEntity extends BaseEntity {
@@ -19,7 +19,8 @@ export class UsersEntity extends BaseEntity {
   @Column({ length: 100, unique: true })
   email: string;
 
-  @Column({ length: 100 })
+  @Column()
+  @Exclude()
   password: string;
 
   @Column({ name: 'phone_number', length: 11 })
@@ -101,16 +102,6 @@ export class UsersEntity extends BaseEntity {
     },
   )
   recommendations?: RecommendationsEntity[];
-
-  @OneToMany(
-    () => MedicalSignaturesEntity,
-    (medicalSignatures) => medicalSignatures.user,
-    {
-      eager: true,
-      cascade: true,
-    },
-  )
-  medicalSignatures?: MedicalSignaturesEntity[];
 
   @OneToMany(
     () => EmergencyContactsEntity,

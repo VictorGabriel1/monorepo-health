@@ -42,28 +42,21 @@ import { UpdateResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BloodPressureRepository } from './repositories/blood-pressure.repository';
 import { CurrentMedicationsRepository } from './repositories/current-medications.repository';
+import { MedicalHistoryRepository } from './repositories/medical-history.repository';
 import { RecentConsultationsRepository } from './repositories/recent-consultations.repository';
 import { RecentExamsRepository } from './repositories/recent-exams.repository';
 import { RecommendationsRepository } from './repositories/recommendations.repository';
 import { VaccinationHistoryRepository } from './repositories/vaccination-history.repository';
-import { MedicalHistoryRepository } from './repositories/medical-history.repository';
 
 @Injectable()
 export class ExamsService {
   constructor(
-    @InjectRepository(BloodPressureRepository)
     private readonly bloodPressureRepository: BloodPressureRepository,
-    @InjectRepository(CurrentMedicationsRepository)
     private readonly currentMedicationsRepository: CurrentMedicationsRepository,
-    @InjectRepository(MedicalHistoryRepository)
     private readonly medicalHistoryRepository: MedicalHistoryRepository,
-    @InjectRepository(RecentConsultationsRepository)
     private readonly recentConsultationsRepository: RecentConsultationsRepository,
-    @InjectRepository(RecentExamsRepository)
     private readonly recentExamsRepository: RecentExamsRepository,
-    @InjectRepository(RecommendationsRepository)
     private readonly recommendationsRepository: RecommendationsRepository,
-    @InjectRepository(VaccinationHistoryRepository)
     private readonly vaccinationHistoryRepository: VaccinationHistoryRepository,
   ) {}
 

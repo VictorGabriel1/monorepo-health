@@ -17,5 +17,5 @@ export class EmergencyContactsEntity extends BaseEntity {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'user_id' })
-  user: UsersEntity;
+  user?: UsersEntity;
 }

@@ -8,13 +8,19 @@ export class RecommendationsEntity extends BaseEntity {
   @Column({ type: 'text' })
   recommendation: string;
 
+  @Column({ name: 'user_id' })
+  userId: string;
+
   @ManyToOne(() => UsersEntity, (user) => user.recommendations, {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'user_id' })
-  user: UsersEntity;
+  user?: UsersEntity;
 
-  @ManyToOne(() => DoctorsEntity, (doctor) => doctor.recommendations)
+  @Column({ name: 'doctor_id' })
+  doctorId: string;
+
+  @ManyToOne(() => DoctorsEntity, (doctor) => doctor.recentExams)
   @JoinColumn({ name: 'doctor_id' })
   doctor: DoctorsEntity;
 }

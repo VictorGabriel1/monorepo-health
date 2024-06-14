@@ -18,7 +18,7 @@ import { AddressesEntity } from './entities/addresses.entity';
 import { EmergencyContactsEntity } from './entities/emergency-contacts.entity';
 import { UpdateResult } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { LoginUserDto } from './dtos/login.dto';
+import { LoginDto } from '../shared/dto/login.dto';
 
 @Injectable()
 export class UsersService {
@@ -54,6 +54,14 @@ export class UsersService {
     return user;
   }
 
+  async getUserByEmail(email: string): Promise<UsersEntity> {
+    const user = await this.userRepository.findByEmail(email);
+    if (!user) {
+      throw new NotFoundException(`User with email "${email}" not found.`);
+    }
+    return user;
+  }
+
   async updateUser(
     id: string,
     updateUserDto: UpdateUserDto,
@@ -74,8 +82,8 @@ export class UsersService {
     }
   }
 
-  async login(loginUserDto: LoginUserDto) {
-    const { email, password } = loginUserDto;
+  async login(loginDto: LoginDto) {
+    const { email, password } = loginDto;
 
     // Buscar usuário pelo email
     const user = await this.userRepository.findByEmail(email);
@@ -104,10 +112,7 @@ export class UsersService {
     }
   }
 
-  async getAddressById(
-    id: string,
-    addressId: string,
-  ): Promise<AddressesEntity> {
+  async getAddressById(id: string): Promise<AddressesEntity> {
     const address = await this.addressRepository.findById(id);
     if (!address) {
       throw new NotFoundException(`Address with ID "${id}" not found.`);

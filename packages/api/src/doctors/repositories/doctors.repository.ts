@@ -22,6 +22,10 @@ export class DoctorsRepository {
     return doctor;
   }
 
+  async findByEmail(email: string): Promise<DoctorsEntity | undefined> {
+    return await this.doctorsRepository.findOne({ where: { email } });
+  }
+
   async update(
     id: string,
     doctorData: DeepPartial<DoctorsEntity>,

@@ -17,6 +17,10 @@ export class CreateBloodPressureDto {
   @ApiProperty()
   @IsUUID()
   userId: string;
+
+  @ApiProperty()
+  @IsUUID()
+  doctorId: string;
 }
 
 export class UpdateBloodPressureDto extends PartialType(
